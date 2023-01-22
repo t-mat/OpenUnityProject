@@ -10,7 +10,7 @@
 //
 // ## Setup
 //
-// Copy `OpenUnityProject.cmd` (this file) to your Untiy project folder which contains `Assets/`, `ProjectSettings/` etc.
+// Copy `OpenUnityProject.cmd` (this file) to your Unity project folder which contains `Assets/`, `ProjectSettings/` etc.
 //   - You do not need to copy any other files.
 //
 // ## Usage
