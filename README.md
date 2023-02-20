@@ -4,15 +4,19 @@
 Setup
 -----
 
-Download and unzip the following file
-
-- [OpenUnityProject_v0.1.3.zip](https://github.com/t-mat/OpenUnityProject/releases/download/v0.1.3/OpenUnityProject_v0.1.3.zip)
-
-Copy `OpenUnityProject.cmd` to your Unity project folder which contains `Assets/`, `ProjectSettings/` etc.
-  - You do not need to copy any other files.
+You can setup your Unity Project with the following commands:
 
 ```
-YourUnityProjectFolder
+pushd "\PATH\TO\Your\UnityProject\"
+where ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.githubusercontent.com/t-mat/OpenUnityProject/main/OpenUnityProject.cmd
+.\OpenUnityProject.cmd
+```
+
+Please note that `\PATH\TO\Your\UnityProject\` means the root directory of your Untiy Project.
+The root directory must contains `Assets/` etc.
+
+```
+\PATH\TO\Your\UnityProject\
 |
 +---Assets
 |
@@ -34,9 +38,18 @@ It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `
   - Or it reports error.
 
 
-Build
------
+Clone & Build
+-------------
 
-```
+```bat
+pushd "%USERPROFILE%\Documents"
+git clone https://github.com/t-mat/OpenUnityProject.git
+cd OpenUnityProject
+
+@rem Edit and build
+notepad src\OpenUnityProject.cs
 cmd.exe /c .\scripts\build.cmd
+
+@rem Make sure OpenUnityProject.cmd is updated
+dir .\OpenUnityProject.cmd
 ```
