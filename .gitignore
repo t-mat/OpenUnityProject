@@ -1,6 +1,7 @@
 .vs/
 .idea/
 staging/
+ProjectSettings/
 
 *.zip
 *.user
