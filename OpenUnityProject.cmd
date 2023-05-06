@@ -108,7 +108,17 @@ public static class Program {
             triedPaths.Add(p);
         }
 
-        // (2) %APPDATA%\UnityHub\secondaryInstallPath.json
+        // (2) %ProgramFiles%\Unity (Version)\Editor\Unity.exe
+        {
+            string p0 = string.Format("%ProgramFiles%\\Unity {0}\\Editor\\Unity.exe", version);
+            string p  = Environment.ExpandEnvironmentVariables(p0);
+            if (File.Exists(p)) {
+                return p;
+            }
+            triedPaths.Add(p);
+        }
+
+        // (3) %APPDATA%\UnityHub\secondaryInstallPath.json
         {
             string jsonPath   = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\secondaryInstallPath.json");
             string jsonString = File.ReadAllText(jsonPath);
@@ -122,7 +132,7 @@ public static class Program {
             }
         }
 
-        // (3) %APPDATA%\UnityHub\editors.json
+        // (4) %APPDATA%\UnityHub\editors.json
         {
             string jsonPath   = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\editors.json");
             string jsonString = File.ReadAllText(jsonPath);
