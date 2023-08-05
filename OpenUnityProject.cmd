@@ -105,6 +105,7 @@ public static class Program {
         }
 
         CheckProgramFiles(version, CheckPath);
+        CheckProgramFiles2(version, CheckPath);
         CheckSecondaryInstallPath(version, CheckPath);
         CheckEditorsJson(version, CheckPath);
 
@@ -130,6 +131,13 @@ public static class Program {
     private static void CheckProgramFiles(string version, Action<string> checkPath) {
         // (1) %ProgramFiles%\Unity\Hub\Editor\(Version)\Editor\Unity.exe
         var    p0 = $"%ProgramFiles%\\Unity\\Hub\\Editor\\{version}\\Editor\\Unity.exe";
+        string p  = Environment.ExpandEnvironmentVariables(p0);
+        checkPath(p);
+    }
+
+	private static void CheckProgramFiles2(string version, Action<string> checkPath) {
+        // %ProgramFiles%\Unity <VERSION>\Editor\Unity.exe
+        var    p0 = $"%ProgramFiles%\\Unity {version}\\Editor\\Unity.exe";
         string p  = Environment.ExpandEnvironmentVariables(p0);
         checkPath(p);
     }
