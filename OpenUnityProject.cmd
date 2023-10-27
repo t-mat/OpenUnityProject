@@ -7,12 +7,14 @@
 // ====================
 //
 // Windows batch file which invokes appropriate version of `Unity.exe`.
+// It also avoid to launch UnityHub.
 //
 //
 // ## Setup
 //
 // Copy `OpenUnityProject.cmd` (this file) to your Unity project folder which contains `Assets/`, `ProjectSettings/` etc.
 //   - You do not need to copy any other files.
+//
 //
 // ## Usage
 //
@@ -21,6 +23,7 @@
 // 
 // It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `Unity.exe` and invoke it.
 //   - Or it reports error.
+//
 //
 // ## License
 //
@@ -32,12 +35,33 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 public static class Program {
     private const string UnityArgFormat    = "-projectPath \"{0}\" {1}";
     private const string VersionLinePrefix = "m_EditorVersion: ";
+    private const string IpcName           = "Unity-hubIPCService";
+
+    /*
+    ## How can I check the IpcName?
+
+    You can check it with the following commands:
+
+        cd /path/to/Unity Hub/
+        # https://github.com/electron/asar
+        npm install --engine-strict @electron/asar
+        mkdir extracted
+        ./node_modules/.bin/asar extract app.asar extracted
+        cat extracted/build/main/services/localIPC/hubIPCService.js
+        cat extracted/build/main/common/ipc/UnityIPCServer.js
+        cat extracted/build/main/common/ipc/unityIPCNameFormatter.js
+
+    See HubIPCService.constructor(), UnityIPCServer.constructor()
+    and unityIPCNameFormatter.formatName().
+    */
 
     public static void Main() {
         string  currentDir      = Directory.GetCurrentDirectory();
@@ -51,7 +75,11 @@ public static class Program {
             Abort();
         } else {
             Console.WriteLine("\"{0}\" {1}", unityEditor, unityArg);
+
+            var pipeServer = new NamedPipeServerStream(IpcName, PipeDirection.InOut, 1);
             System.Diagnostics.Process.Start(unityEditor, unityArg);
+            pipeServer.WaitForConnection();
+            pipeServer.Close();
         }
     }
 
