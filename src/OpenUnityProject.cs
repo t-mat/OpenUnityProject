@@ -30,6 +30,7 @@
 //   This code is licensed under CC0-1.0,
 //   https://creativecommons.org/publicdomain/zero/1.0/
 //
+
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ public static class Program {
 
     private static string GetProjectVersionString(string projectVersionFileName) {
         // Does ProjectVersion.txt exist?
-        if (!File.Exists(projectVersionFileName)) {
+        if (! File.Exists(projectVersionFileName)) {
             Error($"ProjectVersion.txt does not found at\n  {projectVersionFileName}");
         }
 
@@ -162,7 +163,7 @@ public static class Program {
         checkPath(p);
     }
 
-	private static void CheckProgramFiles2(string version, Action<string> checkPath) {
+    private static void CheckProgramFiles2(string version, Action<string> checkPath) {
         // %ProgramFiles%\Unity <VERSION>\Editor\Unity.exe
         var    p0 = $"%ProgramFiles%\\Unity {version}\\Editor\\Unity.exe";
         string p  = Environment.ExpandEnvironmentVariables(p0);
@@ -174,7 +175,7 @@ public static class Program {
         string jsonPath   = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\secondaryInstallPath.json");
         string jsonString = File.ReadAllText(jsonPath);
         string altPath    = jsonString.Replace('"', ' ').Trim();
-        if (!string.IsNullOrEmpty(altPath)) {
+        if (! string.IsNullOrEmpty(altPath)) {
             checkPath($"{altPath}\\{version}\\Editor\\Unity.exe");
         }
     }
