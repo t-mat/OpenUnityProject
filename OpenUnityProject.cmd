@@ -6,8 +6,8 @@
 // OpenUnityProject.cmd
 // ====================
 //
-// Windows batch file which invokes appropriate version of `Unity.exe`.
-// It also avoid to launch UnityHub.
+// Windows batch file which invokes the appropriate version of `Unity.exe`.
+// It also avoids launching UnityHub.
 //
 //
 // ## Setup
@@ -19,10 +19,10 @@
 // ## Usage
 //
 // Run copied version of `OpenUnityProject.cmd`.
-//   - You can invoke it from Explorer or Command prompt.
+//   - You can invoke it from Explorer or the Command prompt.
 // 
-// It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `Unity.exe` and invoke it.
-//   - Or it reports error.
+// It will read `ProjectSettings/ProjectVersion.txt`, find the appropriate version of `Unity.exe`, and invoke it.
+//   - Or it reports an error.
 //
 //
 // ## License
@@ -77,8 +77,8 @@ public static class Program {
         } else {
             Console.WriteLine("\"{0}\" {1}", unityEditor, unityArg);
 
-            var pipeServer = new NamedPipeServerStream(IpcName, PipeDirection.InOut, 1);
-            System.Diagnostics.Process.Start(unityEditor, unityArg);
+            NamedPipeServerStream pipeServer = new(IpcName, PipeDirection.InOut, maxNumberOfServerInstances: 1);
+            System.Diagnostics.Process.Start(fileName: unityEditor, arguments: unityArg);
             pipeServer.WaitForConnection();
             pipeServer.Close();
         }
@@ -146,13 +146,13 @@ public static class Program {
         StringBuilder sb = new();
         sb.AppendLine($"Unity Editor {version} does not found in the following paths");
         foreach (string? path in triedPaths) {
-            sb.AppendFormat("  {0}\n", path);
+            sb.Append($"  {path}\n");
         }
         sb.AppendLine("");
         sb.AppendLine("Please check :");
         sb.AppendLine("  (1) Installed Unity Editor versions");
         sb.AppendLine("  (2) Content of ProjectVersion.txt at");
-        sb.AppendFormat("  {0}\n", projectVersionFileName);
+        sb.Append($"  {projectVersionFileName}\n");
         Error(sb.ToString());
         return null;
     }
@@ -175,7 +175,7 @@ public static class Program {
         // (2) %APPDATA%\UnityHub\secondaryInstallPath.json
         string jsonPath   = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\secondaryInstallPath.json");
         string jsonString = File.ReadAllText(jsonPath);
-        string altPath    = jsonString.Replace('"', ' ').Trim();
+        string altPath    = jsonString.Replace(oldChar: '"', newChar: ' ').Trim();
         if (! string.IsNullOrEmpty(altPath)) {
             checkPath($"{altPath}\\{version}\\Editor\\Unity.exe");
         }
