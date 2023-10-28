@@ -2,6 +2,9 @@
 .idea/
 staging/
 ProjectSettings/
+bin/
+obj/
 
 *.zip
 *.user
+*.csproj
