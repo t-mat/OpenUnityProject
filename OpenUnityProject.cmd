@@ -77,10 +77,17 @@ public static class Program {
         } else {
             Console.WriteLine("\"{0}\" {1}", unityEditor, unityArg);
 
-            NamedPipeServerStream pipeServer = new(IpcName, PipeDirection.InOut, maxNumberOfServerInstances: 1);
-            System.Diagnostics.Process.Start(fileName: unityEditor, arguments: unityArg);
-            pipeServer.WaitForConnection();
-            pipeServer.Close();
+            try {
+                // Creation of NamedPipeServerStream may fail when actual UnityHub already exists.
+                NamedPipeServerStream pipeServer = new(IpcName, PipeDirection.InOut, maxNumberOfServerInstances: 1);
+                System.Diagnostics.Process.Start(fileName: unityEditor, arguments: unityArg);
+                pipeServer.WaitForConnection();
+                pipeServer.Close();
+            }
+            catch {
+                // Retry
+                System.Diagnostics.Process.Start(fileName: unityEditor, arguments: unityArg);
+            }
         }
     }
 
