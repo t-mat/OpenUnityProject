@@ -8,7 +8,7 @@ You can setup your Unity Project with the following commands:
 
 ```
 pushd "\PATH\TO\Your\UnityProject\"
-where ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.githubusercontent.com/t-mat/OpenUnityProject/main/OpenUnityProject.cmd
+where ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.githubusercontent.com/t-mat/OpenUnityProject/pwsh/OpenUnityProject.cmd
 .\OpenUnityProject.cmd
 ```
 
