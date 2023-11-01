@@ -1,4 +1,12 @@
-﻿Windows batch file which invokes appropriate version of `Unity.exe`.
+﻿Windows batch file which invokes appropriate version of `Unity.exe` without UnityHub.
+
+
+Prerequisites
+-------------
+
+- Windows 10/11
+- `pwsh` ([PowerShell7](https://microsoft.com/PowerShell))
+- Unity 2019 or greater.
 
 
 Setup
@@ -8,7 +16,7 @@ You can setup your Unity Project with the following commands:
 
 ```
 pushd "\PATH\TO\Your\UnityProject\"
-where ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.githubusercontent.com/t-mat/OpenUnityProject/pwsh/OpenUnityProject.cmd
+where.exe ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.githubusercontent.com/t-mat/OpenUnityProject/main/OpenUnityProject.cmd
 .\OpenUnityProject.cmd
 ```
 
@@ -35,7 +43,8 @@ Run copied version of `OpenUnityProject.cmd`.
   - You can invoke it from Explorer or Command prompt.
 
 It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `Unity.exe` and invoke it.
-  - Or it reports error.
+  - Or it reports an error.
+  - It tries to avoid to launch UnityHub.
 
 
 Clone & Build
