@@ -47,6 +47,17 @@ It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `
   - It tries to avoid to launch UnityHub.
 
 
+Usage (#2)
+----------
+
+If you put `OpenUnityProject.cmd` to the `%PATH%`, you can invoke it as a "normal" command.
+
+```
+cd /d C:\Path\To\Your\UnityProject
+OpenUnityProject.cmd
+```
+
+
 Clone & Build
 -------------
 
@@ -55,10 +66,10 @@ pushd "%USERPROFILE%\Documents"
 git clone https://github.com/t-mat/OpenUnityProject.git
 cd OpenUnityProject
 
-@rem Edit and build
+: Edit and build
 notepad src\OpenUnityProject.cs
 cmd.exe /c .\scripts\build.cmd
 
-@rem Make sure OpenUnityProject.cmd is updated
+: Make sure OpenUnityProject.cmd is updated
 dir .\OpenUnityProject.cmd
 ```

@@ -106,7 +106,7 @@ public static class Program {
     private static string GetProjectVersionString(string projectVersionFileName) {
         // Does ProjectVersion.txt exist?
         if (! File.Exists(projectVersionFileName)) {
-            Error($"ProjectVersion.txt does not found at\n  {projectVersionFileName}");
+            Error($"ProjectVersion.txt is not found at\n  {projectVersionFileName}");
         }
 
         // Get version string from ProjectVersion.txt
@@ -140,10 +140,36 @@ public static class Program {
             }
         }
 
-        CheckProgramFiles(version, CheckPath);
-        CheckProgramFiles2(version, CheckPath);
-        CheckSecondaryInstallPath(version, CheckPath);
-        CheckEditorsJson(version, CheckPath);
+        try {
+            CheckProgramFiles(version, CheckPath);
+        }
+        catch {
+            //
+        }
+        try {
+            CheckProgramFiles2(version, CheckPath);
+        }
+        catch {
+            //
+        }
+        try {
+            CheckSecondaryInstallPath(version, CheckPath);
+        }
+        catch {
+            //
+        }
+        try {
+            CheckEditorsJson(version, CheckPath);
+        }
+        catch {
+            //
+        }
+        try {
+            CheckEditorsV2Json(version, CheckPath);
+        }
+        catch {
+            //
+        }
 
         if (hits.Count > 0) {
             return hits[0];
@@ -151,7 +177,7 @@ public static class Program {
 
         // not found
         StringBuilder sb = new();
-        sb.AppendLine($"Unity Editor {version} does not found in the following paths");
+        sb.AppendLine($"Unity Editor {version} is not found in the following paths");
         foreach (string? path in triedPaths) {
             sb.Append($"  {path}\n");
         }
@@ -159,7 +185,12 @@ public static class Program {
         sb.AppendLine("Please check :");
         sb.AppendLine("  (1) Installed Unity Editor versions");
         sb.AppendLine("  (2) Content of ProjectVersion.txt at");
-        sb.Append($"  {projectVersionFileName}\n");
+        sb.AppendLine($"      {projectVersionFileName}");
+        string versionWithoutF1 = RemoveTrailingF1FromVersion(version);
+        sb.AppendLine("  (3) Official download page:");
+        sb.Append("\x1b[93m");
+        sb.AppendLine($"      https://unity.com/releases/editor/whats-new/{versionWithoutF1}");
+        sb.Append("\x1b[0m");
         Error(sb.ToString());
         return null;
     }
@@ -190,7 +221,17 @@ public static class Program {
 
     private static void CheckEditorsJson(string version, Action<string> checkPath) {
         // (3) %APPDATA%\UnityHub\editors.json
-        string jsonPath    = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\editors.json");
+        string jsonPath = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\editors.json");
+        CheckEditorsJsonBase(jsonPath, version, checkPath);
+    }
+
+    private static void CheckEditorsV2Json(string version, Action<string> checkPath) {
+        // (3) %APPDATA%\UnityHub\editors-v2.json
+        string jsonPath = Environment.ExpandEnvironmentVariables("%APPDATA%\\UnityHub\\editors-v2.json");
+        CheckEditorsJsonBase(jsonPath, version, checkPath);
+    }
+
+    private static void CheckEditorsJsonBase(string jsonPath, string version, Action<string> checkPath) {
         string jsonString  = File.ReadAllText(jsonPath);
         var    topElements = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonString);
         if (topElements == null) {
@@ -209,5 +250,12 @@ public static class Program {
                 }
             }
         }
+    }
+
+    private static string RemoveTrailingF1FromVersion(string version) {
+        if (version.EndsWith("f1")) {
+            return version.Substring(0, version.Length - 2);
+        }
+        return version;
     }
 }
