@@ -58,6 +58,14 @@ OpenUnityProject.cmd
 ```
 
 
+Special CLI argument
+--------------------
+
+`--open-unity-project-with=XXX`
+- You can specify the desired version of `unity.exe`.
+- For example: `OpenUnityProject.cmd --open-unity-project-with=2022.3.19f1`
+
+
 Clone & Build
 -------------
 
