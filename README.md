@@ -12,7 +12,7 @@ Prerequisites
 Setup
 -----
 
-You can setup your Unity Project with the following commands:
+You can set up your Unity project with the following commands:
 
 ```
 pushd "\PATH\TO\Your\UnityProject\"
@@ -20,7 +20,7 @@ where.exe ProjectSettings:ProjectVersion.txt && curl.exe -JOL https://raw.github
 .\OpenUnityProject.cmd
 ```
 
-Please note that `\PATH\TO\Your\UnityProject\` means the root directory of your Untiy Project.
+Please note that `\PATH\TO\Your\UnityProject\` means the root directory of your Untiy project.
 The root directory must contains `Assets/` etc.
 
 ```
@@ -39,8 +39,8 @@ The root directory must contains `Assets/` etc.
 Usage
 -----
 
-Run copied version of `OpenUnityProject.cmd`.
-  - You can invoke it from Explorer or Command prompt.
+Run the copied version of `OpenUnityProject.cmd`.
+  - You can invoke it via Explorer, Command prompt or PowerShell.
 
 It will read `ProjectSettings/ProjectVersion.txt`, find appropriate version of `Unity.exe` and invoke it.
   - Or it reports an error.
@@ -64,6 +64,18 @@ Special CLI argument
 `--open-unity-project-with=XXX`
 - You can specify the desired version of `unity.exe`.
 - For example: `OpenUnityProject.cmd --open-unity-project-with=2022.3.19f1`
+
+
+Note about Unity 6
+------------------
+
+New versioning convention specifies Unity 6 as version `6000`.
+For example, you can invoke `Unity 6000.0.0b11` by the following command:
+
+```bat
+cd /d C:\Path\To\Your\UnityProject
+OpenUnityProject.cmd --open-unity-project-with=6000.0.0b11
+```
 
 
 Clone & Build
