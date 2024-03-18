@@ -72,7 +72,7 @@ public static class Program {
 
         string currentDir      = Directory.GetCurrentDirectory();
         string unityArg        = string.Format(UnityArgFormat, currentDir, argString);
-        string versionFileName = GetVersionFileName(currentDir);
+        string versionFileName = GetProjectVersionTxtFileName(currentDir);
         string version         = desiredUnityVersion ?? GetProjectVersionString(versionFileName);
 
         (List<string> candidates, List<string?> triedPaths) = GetUnityEditorCandidatesByVersion(version);
@@ -141,7 +141,7 @@ public static class Program {
         return (newArgString, desiredVersion);
     }
 
-    private static string GetVersionFileName(string unityProjectPath) =>
+    private static string GetProjectVersionTxtFileName(string unityProjectPath) =>
         $@"{unityProjectPath}\ProjectSettings\ProjectVersion.txt";
 
     private static string GetProjectVersionString(string projectVersionFileName) {
