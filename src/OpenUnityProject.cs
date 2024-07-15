@@ -6,7 +6,6 @@ using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 public static class Program {
     private const string UnityArgFormat    = "-projectPath \"{0}\" {1}";
@@ -32,6 +31,22 @@ public static class Program {
     private const string IpcName = "Unity-hubIPCService";
 
     public static void Main() {
+        int exitCode = 1;
+        try {
+            SetWindowsTerminalProgressIntermediate();
+            Main2();
+            exitCode = 0;
+        }
+        catch {
+            exitCode = 1;
+        }
+        finally {
+            SetWindowsTerminalProgressDefault();
+        }
+        Environment.Exit(exitCode);
+    }
+
+    private static void Main2() {
         string argString0 = Environment.GetEnvironmentVariable("ARGS") ?? "";
         (string argString, string? desiredUnityVersion) = FilterArgString(argString0);
 
@@ -86,7 +101,12 @@ public static class Program {
         return sb.ToString();
     }
 
-    private static void Abort() => Environment.Exit(1);
+    private static void Abort() => throw new MyException();
+
+    // https://learn.microsoft.com/en-us/windows/terminal/tutorials/progress-bar-sequences
+    private static void SetWindowsTerminalProgressIntermediate() => Console.Write("\x1b]9;4;3\x07");
+
+    private static void SetWindowsTerminalProgressDefault() => Console.Write("\x1b]9;4;0\x07");
 
     private static void Error(string s) {
         Console.WriteLine("\x1b[91m==== ERROR ====\x1b[0m");
@@ -241,6 +261,18 @@ public static class Program {
                     }
                 }
             }
+        }
+    }
+
+    [Serializable]
+    public class MyException : Exception {
+        public MyException() {
+        }
+
+        public MyException(string message) : base(message) {
+        }
+
+        public MyException(string message, Exception innerException) : base(message, innerException) {
         }
     }
 }
